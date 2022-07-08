@@ -11,10 +11,20 @@
 
 # ---BEGIN---
 
+# Require root
+if [[ $EUID -ne 0 ]]; then
+    echo "$0 is not running as root. Try using sudo."
+    exit 2
+fi
+
 # Pathname of the lockfile that signals the script that we are in
 # maintenance mode.  Contains the VMs/CTs that were disabled so they
 # can be re-enabled later:
 lockfile="/root/maintmode.lock"
+
+# ---------
+# Functions
+# ---------
 
 # Enable maintenance mode - Query all instances, check which are set to
 # start at boot, record and disable them.
@@ -81,7 +91,9 @@ function disable_maintmode(){
   rm $lockfile
 }
 
-# Runtime:
+# -----
+# Start
+# -----
 
 # If the lockfile doesn't exist, we want to enable maintenance mode (disable onboot).
 # Otherwise we want to disable maintenance mode (enable onboot):
