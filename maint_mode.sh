@@ -33,7 +33,7 @@ function enable_maintmode(){
   echo "Disabling (and saving) current onboot settings:"
 
   # List all VMs, filter only the first word, then filter only numerics (IDs):
-  for vm in $(qm list | awk '{print $1}' | grep -Eo '[0-9]{1,3}')
+  for vm in $(qm list | awk '{print $1}' | grep -Eo '[0-9]{1,5}')
   do
     # Of those, query each VMID and search for those with onboot: enabled:
     for vmstatus in $(qm config $vm | grep "onboot: 1" | awk '{print $2}')
@@ -46,7 +46,7 @@ function enable_maintmode(){
   done
 
   # Repeat for CTs as they use a different command to enable/disable:
-  for ct in $(pct list | awk '{print $1}' | grep -Eo '[0-9]{1,3}')
+  for ct in $(pct list | awk '{print $1}' | grep -Eo '[0-9]{1,5}')
   do
     for ctstatus in $(pct config $ct | grep "onboot: 1" | awk '{print $2}')
     do
